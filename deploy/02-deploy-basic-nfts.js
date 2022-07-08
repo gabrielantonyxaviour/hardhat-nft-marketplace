@@ -11,7 +11,14 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     log("----------------------------------------------------")
     const args = []
-    const nftMarketplace = await deploy("NftMarketplace", {
+    const basicNft = await deploy("BasicNft", {
+        from: deployer,
+        args: args,
+        log: true,
+        waitConfirmations: waitBlockConfirmations,
+    })
+
+    const basicNftTwo = await deploy("BasicNftTwo", {
         from: deployer,
         args: args,
         log: true,
@@ -21,9 +28,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // Verify the deployment
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying...")
-        await verify(nftMarketplace.address, args)
+        await verify(basicNft.address, args)
+        await verify(basicNftTwo.address, args)
     }
     log("----------------------------------------------------")
 }
 
-module.exports.tags = ["all", "nftmarketplace"]
+module.exports.tags = ["all", "basicnft"]
